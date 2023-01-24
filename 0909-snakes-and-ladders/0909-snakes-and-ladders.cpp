@@ -1,47 +1,35 @@
 class Solution {
 public:
-    vector<int> calc(int row,int next_step)
-    {
-        int x=(next_step-1)/row;
-        int y=(next_step-1)%row;
-        if(x%2==1)y=row-1-y;
-        x=row-1-x;
-        return {x,y};
-    }
-    
-    int snakesAndLadders(vector<vector<int>>& board)
-    {
-        int r=board.size();
-        queue<int> q;
-        q.push(1);
-        int step=0;
-        while(!q.empty())
-        {
-            int n=q.size();
-            for(int i=0;i<n;i++)
-            {
-                int t=q.front();
-                q.pop();
-                if(t==r*r)return step;
-                for(int i=1;i<=6;i++)
-                {
-                    int next_step=t+i;
-                    if(next_step>r*r)break;
-                    auto v=calc(r,next_step); 
-                    int row=v[0],col=v[1];
-                    if(board[row][col]!=-1)
-                    {
-                        next_step=board[row][col];
-                    }
-                    if(board[row][col]!=r*r+1)
-                    {
-                        q.push(next_step);
-                        board[row][col]=r*r+1;
-                    }
+  
+    int snakesAndLadders(vector<vector<int>>& board) {
+    int n = board.size();
+    int steps = 0;
+    queue<int> q;
+    vector<vector<bool>> visited(n, vector<bool>(n, false));
+    q.push(1);
+    visited[n-1][0] = true;
+    while (!q.empty()) {
+        int sz = q.size();
+        for (int i = 0; i < sz; i++) {
+            int f = q.front();
+            q.pop();
+            if (f == n*n) return steps;
+            for (int k = 1; k <= 6; k++) {
+                int curr=k+f;
+                if (curr > n*n) break;
+                int r =  n - (curr - 1) / n  -1;
+                int c = (r%2==n%2)?n-1-(curr-1)%n:(curr-1)%n;
+                if (visited[r][c]) continue;
+                visited[r][c] = true;
+                if (board[r][c] == -1) {
+                    q.push(curr);
+                } else {
+                    q.push(board[r][c]);
                 }
             }
-            step++;
         }
-        return -1;
+        steps++;
     }
+    return -1;
+}
 };
