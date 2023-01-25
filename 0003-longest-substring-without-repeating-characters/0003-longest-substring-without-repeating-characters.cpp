@@ -1,24 +1,26 @@
 class Solution {
 public:
-    //T.C--O(N)
-    //S.C--O(N)
+    //sliding window
     int lengthOfLongestSubstring(string s) {
-     vector<int> arr(256,-1);
-     
-        int maxlen=0,start=-1;
-        
-        for(int i=0;i<s.length();i++)
+        int l=0;
+        int r=0;
+        vector<int>occurrence(256,0);
+        int ans=0;
+        while(r<s.length())
         {
-            if(arr[s[i]]>start)
+            occurrence[s[r]]++;
+            //for repeating word
+            //just increment the left pointer
+            //and decrement that occurence of left
+            //i.e. just shifting our sliding window now
+            while(occurrence[s[r]]>1)
             {
-                start=arr[s[i]];
+                occurrence[s[l]]--;
+                l++;
             }
-            
-            arr[s[i]]=i;
-            
-            maxlen=max(maxlen,i-start);
+            ans=max(ans,r-l+1);
+            r++;
         }
-        return maxlen;
-    
+    return ans;
     }
 };
