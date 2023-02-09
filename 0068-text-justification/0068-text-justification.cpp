@@ -1,66 +1,66 @@
 class Solution {
 public:
-    string setting(vector<string>A,int last,int id,int B, int cnt){
-    string temp = "";
-    if(id==last){
-        int left = B - A[id].length();
-        temp += A[id];
-        while(left--){
-            temp += " ";
+    vector<string> fullJustify(vector<string>& a, int l) {
+   int i=0,n=a.size();
+   vector<string> ansstring; 
+   while(i<n)
+   {
+        vector<string> v;
+        int count=0;
+        // calculating the number of words in particular wigth
+        while(i<n && count+a[i].size() <=l) 
+        {
+            count+=a[i].size()+1; //+1 for extra spacing in each word 
+            v.push_back(a[i]); // push the words into a vector of string
+            i++;
         }
-        return temp;
-    }
-    int blocks = id-last;
-    cnt -= blocks;
-    int left = B-cnt;
-    int ext = left%blocks;
-    int curr = left/blocks;
-    for(int i = last;i<=id;i++){
-        temp += A[i];
-        if(i!=id){
-            for(int j = 0;j<curr;j++){
-                temp += " ";
+        // check if only one word or end line i.e spacing is add only in the end
+        if(i==n || v.size()==1) 
+        {
+            string ansinn="";
+            // conversion of vector of string into single string
+            for(int j=0;j<v.size();j++)
+            {
+                  ansinn+=v[j];
+                  ansinn+=" ";
             }
-            if(ext){
-                temp += " ";
-                ext--;
-            }
+            // if word size is of width size extra spacing is added in the end
+            ansinn.pop_back();
+            // to add extra spacing in the end
+            while(ansinn.size()!=l) ansinn+=" ";
+            
+            ansstring.push_back(ansinn); 
         }
-    }
-    return temp;
-}
-vector<string> fullJustify(vector<string> &A, int B){
-    int cnt = 0;
-    int last = 0;
-    vector<string>ans;
-    string temp = "";
-    int n = A.size();
-    for(int i = 0;i<n;i++){
-        cnt += A[i].length() + 1;
-        temp += A[i] + " ";
-        if(cnt-1==B){
-            temp.pop_back();
-            ans.push_back(temp);
-            temp = "";
-            cnt = 0;
-            last = i+1;
-        }else if(cnt-1>B){
-            temp = setting(A,last,i-1,B,cnt-2-A[i].length());
-            ans.push_back(temp);
-            i--;
-            temp = "";
-            last = i+1;
-            cnt = 0;
-        }else
-        if(i==n-1){
-            while(cnt<B){
-                temp += " ";
-                cnt++;
+        else 
+        {
+            // find the total number of spaces in the line
+            int space=l-count+v.size(),len=v.size(), avg=space/(len-1);
+            vector<int> tmp;
+            if(avg*(len-1)!=space) avg++;
+            // convert the spaces into a vector prefering extra space in left side using some calculations
+            for(int j=1;j<v.size();j++)
+            {
+                 if((avg-1)*(len-j)==space) avg--;
+                 space-=avg;
+                 tmp.push_back(avg);
             }
-            ans.push_back(temp);
+            
+            //now convert the vector into final string
+            string ans=v[0];
+            int k=0;
+            while(k+1<len)
+            {
+                int j=tmp[k];
+                while(j--) ans+=" ";
+                ans+=v[k+1];
+                k++;
+            }
+            
+            ansstring.push_back(ans);   
         }
-    }
-    return ans;
+   }
+    return ansstring;
+    
 }
 
    
