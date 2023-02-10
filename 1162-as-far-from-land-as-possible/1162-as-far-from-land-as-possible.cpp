@@ -1,23 +1,42 @@
 class Solution {
 public:
-    int maxDistance(vector<vector<int>>& g,int steps=0) {
-      queue<pair<int, int>> q, q1;
-  for (auto i = 0; i < g.size(); ++i)
-    for (auto j = 0; j < g[i].size(); ++j)
-      if (g[i][j] == 1)
-        q.push({ i - 1, j }), q.push({ i + 1, j }), q.push({ i, j - 1 }), q.push({ i, j + 1 });
-  while (!q.empty()) {
-    ++steps;
-    while (!q.empty()) {
-      int i = q.front().first, j = q.front().second;
-      q.pop();
-      if (i >= 0 && j >= 0 && i < g.size() && j < g[i].size() && g[i][j] == 0) {
-        g[i][j] = steps;
-        q1.push({ i - 1, j }), q1.push({ i + 1, j }), q1.push({ i, j - 1 }), q1.push({ i, j + 1 });
-      }
-    }
-    swap(q1, q);
-  }
-  return steps == 1 ? -1 : steps - 1;  
+    const pair<int, int> direction[4] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    
+    int maxDistance(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int visited[n][n];
+        
+        queue<pair<int, int>> q;
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[0].size(); j++) {
+                visited[i][j] = grid[i][j];
+                if (grid[i][j]) {
+                    q.push({i, j});
+                }
+            }
+        }
+        
+        int distance = -1;
+        while (!q.empty()) {
+            int qSize = q.size();
+            
+            while (qSize--) {
+                pair<int, int> landCell = q.front();
+                q.pop();
+                
+                for (pair<int, int> dir : direction) {
+                    int x = landCell.first + dir.first;
+                    int y = landCell.second + dir.second;
+                    
+                    if (x >= 0 && y >= 0 && x < grid.size() && y < grid[0].size() && visited[x][y] == 0) {
+                        visited[x][y] = 1;
+                        q.push({x, y});
+                    }
+                }
+            }
+            distance++;
+        }
+        
+        return distance == 0 ? -1 : distance;
     }
 };
