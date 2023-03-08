@@ -8,11 +8,10 @@ public:
         else return -1;
     }
     int finalValueAfterOperations(vector<string>& operations) {
-        int ans=0;
-        for(auto i:operations)
-        {
-            ans+=operation(i);
-        }
-        return ans;
+       int x = 0;
+        for(auto s : operations)
+            if(s[1] == '-') x--;
+            else x++;
+        return x;
     }
 };
