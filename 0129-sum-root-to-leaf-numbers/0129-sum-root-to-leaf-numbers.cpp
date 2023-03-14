@@ -17,15 +17,14 @@ public:
     
     int dfs(TreeNode* root,int cur)
     {
-        if(root==NULL)return 0;
+       if(root==NULL)return 0;
+    
+       cur=cur*10 + root->val;
+       if(root->left==NULL && root->right==NULL)
+       {
+           return cur;
+       }
         
-        cur=cur*10+root->val;
-        
-        if(root->left==NULL && root->right==NULL)
-        {
-            return cur;
-        }
-        
-        return dfs(root->left,cur)+dfs(root->right,cur);
+       return dfs(root->left,cur)+dfs(root->right,cur); 
     }
 };
