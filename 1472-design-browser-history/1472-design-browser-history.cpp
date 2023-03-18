@@ -1,41 +1,38 @@
+//Here i am using doubly linkedlist 
+//it is also possible with stack
 class BrowserHistory {
 public:
-    class Node{
-        public:
-        string url;
-        Node* next;
-        Node* prev;
-        
-        Node(string url){
-            this->url =url;
-            next = NULL;
-            prev = NULL;
-        }
-    };
-    Node* curr;
+    stack<string> history;
+    stack<string> future;
     BrowserHistory(string homepage) {
-        curr = new Node(homepage);
+        history.push(homepage);
+        future=stack<string>();//Reset Stack
     }
     
-    void visit(string url) {
-        Node* temp = new Node(url);
-        curr->next = temp;
-        temp->prev = curr;
-        curr = curr->next;
+    void visit(string url){
+       history.push(url);
+       future = stack<string>();//Reset Stack
     }
     
-    string back(int steps) {
-        while(curr->prev!=nullptr && steps-- >0){
-            curr = curr->prev;
-        }
-        return curr->url;
+    string back(int steps){
+      while(steps>0 && history.size()>1)
+      {
+          future.push(history.top());
+          history.pop();
+          steps--;
+      }
+        return history.top();
     }
     
-    string forward(int steps) {
-        while(curr->next!=nullptr && steps-- >0){
-            curr = curr->next;
-        }
-        return curr->url;
+    string forward(int steps){
+        
+         while(steps>0 && future.size()>0)
+      {
+          history.push(future.top());
+          future.pop();
+          steps--;
+      }
+        return history.top();
     }
 };
 
