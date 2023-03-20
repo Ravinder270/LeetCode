@@ -10,26 +10,24 @@ class Solution {
     // tc = O(v + 2E) // no. of nodes;
     // sc = O(v);
     
-    void dfs(int node,vector<int>&ls,int vis[],vector<int>adj[])
+    void dfs(int node,vector<int>&ls,vector<int>adj[],int vis[])
     {
         vis[node]=1;
         ls.push_back(node);
-        
-        for(auto it: adj[node])
+        for(auto it:adj[node])
         {
             if(!vis[it])
             {
-             dfs(it,ls,vis,adj);   
+                dfs(it,ls,adj,vis);
             }
         }
     }
-    
+   
     vector<int> dfsOfGraph(int v, vector<int> adj[]) {
-        vector<int>ls;
-        int vis[v]={0};
-        
-        dfs(0,ls,vis,adj);
-        return ls;
+      vector<int>ls;
+      int vis[v]={0};
+      dfs(0,ls,adj,vis);
+      return ls;
     }
 };
 
