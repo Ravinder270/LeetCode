@@ -1,28 +1,30 @@
 class Solution {
 public:
-    int M=1e9+7;
-    int maximumProduct(vector<int>& nums, int k) {
-        priority_queue <int, vector<int>, greater<int> > pq(nums.begin(),nums.end());
-        
-        //i am incrementing minimum every and after that taking the product
-        while(k--)
+     int maximumProduct(vector<int>& nums, int k) {
+        priority_queue<int, vector<int>, greater<int>> pq;
+        int n = nums.size(), mod = 1000000007;
+        if(n == 1) return (nums[0]+k) % mod;
+        long long int ans = 1;
+        for(int i = 0; i < n; i++)
         {
-            int val=pq.top();
-            pq.pop();
-            val++;
-            pq.push(val);
+            pq.push(nums[i]);
         }
-        
-        //product time:)
-        long long int prod=1;
+        while(k)
+        {
+            int val = pq.top();
+            pq.pop();
+            int nxt = pq.top();
+            nxt = nxt-val;
+            int mn = min(k, nxt+1);
+            val += mn;
+            pq.push(val);
+            k -= mn;
+        }
         while(!pq.empty())
         {
-            int val=pq.top();
+            ans = (ans*pq.top())%mod;
             pq.pop();
-            prod=((prod%M)*(val%M))%M;
-            prod%=M;
         }
-        
-        return prod%M;
-    }
+        return ans;
+        }
 };
