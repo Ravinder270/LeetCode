@@ -1,32 +1,46 @@
 class Solution {
 private:
     //Same as Number of Islands
-    void dfs(vector<vector<int>> &adj, vector<bool> &visited, int src)
+    void dfs(int node,vector<int>adj[],vector<int>&vis)
     {
-        visited[src] = true;
-        for(int i : adj[src])
-            if(!visited[i])
-                dfs(adj, visited, i);
+        vis[node]=1;
+        
+        for(auto it:adj[node])
+        {
+            if(!vis[it])
+            {
+                dfs(it,adj,vis);
+            }
+        }
+        
     }
 public:
     int makeConnected(int n, vector<vector<int>>& connections) {
-        
-        if(connections.size() < n - 1)
-            return -1;
-        vector<vector<int>> adj(n);
-        for(auto v : connections)
+       
+       //base case when edges are lesser then minimum 
+       if(connections.size()< n-1)
+           return -1;
+       
+       vector<int>adj[n]; 
+        //Creating a graph
+       for(auto v:connections)
+       {
+          adj[v[0]].push_back(v[1]);
+          adj[v[1]].push_back(v[0]);
+       }
+       
+       int components=0;
+        vector<int>vis(n,0);
+        for(int i=0;i<n;i++)
         {
-            adj[v[0]].push_back(v[1]);
-            adj[v[1]].push_back(v[0]);
-        }
-        vector<bool> visited(n, false);
-        int components = 0;
-        for(int i=0; i<n; i++)
-            if(!visited[i])
+            if(!vis[i])
             {
-                dfs(adj, visited, i);
+                dfs(i,adj,vis);
                 components++;
             }
-        return components - 1;
+        }
+        
+        return components-1;
+        
     }
 };
