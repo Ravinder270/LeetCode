@@ -2,22 +2,17 @@ class Solution {
 public:
     int partitionString(string s){
         
-        set<char>se;
-        int ct=0;
-        for(int i=0;i<s.size();i++)
+      int pos[26] = {}, res = 0, last = 0;
+     for (int i = 0; i < s.size(); ++i)
+     {
+        if (pos[s[i] - 'a'] >= last) 
         {
-            if(se.count(s[i]))
-            {
-                ct++;
-                se.erase(se.begin(),se.end());
-                                se.insert(s[i]);
-
-            }
-            else
-            {
-                se.insert(s[i]);
-            }
+            ++res;
+            last = i + 1;
         }
-        return ct+1;
+         
+        pos[s[i] - 'a'] = i + 1;
+    }
+    return res;
     }
 };
