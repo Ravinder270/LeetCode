@@ -1,28 +1,21 @@
 class Solution {
 public:
    
-    //Steps for Greedy approach:
-    //1. Sorting 
-    //2. Taking suffix sum
-    //3. sum up the positive elements only
-    int maxSatisfaction(vector<int>& s) {
-   
-    sort(s.begin(),s.end());    
-    int n=s.size();
-    int sum=0;
-    for(int i=n-1;i>0;i--)
-    {
-        s[i-1]+=s[i];
+   int solve(vector<int> & a, int ind,int cnt,vector<vector<int>>& dp){
+        if(ind >= a.size()){
+            return 0;
+        }
+        if(dp[ind][cnt]!=-1){
+            return dp[ind][cnt];
+        }
+        int take = (a[ind]*cnt) + solve(a,ind+1,cnt+1,dp);
+        int notTake = solve(a,ind+1,cnt,dp);
+        return dp[ind][cnt] = max(take,notTake);
     }
-    
-    int i=0;
-    while(i<n)
-    {
-        if(s[i]>=0)sum+=s[i];
-        i++;
-        
-    }
-        
-        return sum;
+    int maxSatisfaction(vector<int>& satisfaction) {
+        int n = satisfaction.size();
+        sort(satisfaction.begin(),satisfaction.end());
+        vector<vector<int>>dp(n,vector<int>(n+1,-1));
+        return solve(satisfaction,0,1,dp);
     }
 };
