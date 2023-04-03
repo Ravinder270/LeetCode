@@ -19,7 +19,7 @@ public:
     int minStartValue(vector<int>& nums) {
         
         int startvalue=0;
-        for(int i=1;i<=10000;i++)
+        for(int i=1;i<=3000;i++)
         {
             if(prefixsum(nums,i))
             {
