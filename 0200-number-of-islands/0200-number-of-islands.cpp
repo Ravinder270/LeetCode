@@ -1,39 +1,59 @@
 class Solution {
 public:
-    void DFS(vector<vector<char>>& grid, int i, int j) {
-        // boundary checking
-        if(i < 0 || i >= grid.size() || j < 0 || j >= grid[0].size())
-            return;
-        // return if current position is of water or is already visited
-        if(grid[i][j] == '2' || grid[i][j] == '0')
-            return;
+   
+    void bfs(int row,int col,vector<vector<int>>&vis,vector<vector<char>>grid)
+    {
+        vis[row][col]=1;
+        queue<pair<int,int>>q;
         
-        // mark the current as visited
-        grid[i][j] = '2';
+        q.push({row,col});
+        int n=grid.size();
+        int m=grid[0].size();
         
-        // do DFS in all 4 directions
-        DFS(grid, i+1, j);
-        DFS(grid, i, j-1);
-        DFS(grid, i-1, j);
-        DFS(grid, i, j+1);
+        while(!q.empty())
+        {
+            int row=q.front().first;
+            int col=q.front().second;
+            q.pop();
+            
+            for(int delrow=-1;delrow<=1;delrow++)
+            {
+                for(int delcol=-1;delcol<=1;delcol++)
+                {
+                    if(abs(delrow) != abs(delcol)){
+                    int nrow = row + delrow;
+                    int ncol = col + delcol;
+                    
+                    if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && grid[nrow][ncol]=='1' && !vis[nrow][ncol])
+                    {
+                        vis[nrow][ncol]=1;
+                        q.push({nrow,ncol});
+                    }
+                    }
+                }
+            }
+            
+        }
+        
     }
-    
     int numIslands(vector<vector<char>>& grid) {
-        // We can treat the matrix grid as a grid. Each Island is a
-        // connected component. The task is to find no. of disconnectedd components
-        // in the graph.
+      
+        int n=grid.size();
+        int m=grid[0].size();
         
-        int islands = 0;
-        // We make each 1 as 2 in when it is visited
-        for(int i = 0; i < grid.size(); i++) {
-            for(int j = 0; j < grid[0].size(); j++) {
-                // do DFS in case has not been visited and there is land
-                if(grid[i][j] == '1') {
-                    DFS(grid, i, j);
-                    ++islands;
-                } 
+        int cnt=0;
+        vector<vector<int>>vis(n,vector<int>(m,0));
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(!vis[i][j] && grid[i][j]=='1')
+                {
+                    bfs(i,j,vis,grid);
+                    cnt++;
+                }
             }
         }
-        return islands;
+        return cnt;
     }
 };
