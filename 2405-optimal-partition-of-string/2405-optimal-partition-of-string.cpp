@@ -1,18 +1,46 @@
 class Solution {
 public:
     int partitionString(string s){
-        
-      int pos[26] = {}, res = 0, last = 0;
-     for (int i = 0; i < s.size(); ++i)
-     {
-        if (pos[s[i] - 'a'] >= last) 
+    
+        int n=s.length();
+        int cnt_l=1;
+        set<char>se;
+        int cnt_r=1;
+        //first from left
+        for(int i=0;i<n;i++)
         {
-            ++res;
-            last = i + 1;
+           if(se.count(s[i]))
+           {
+               cnt_l++;
+               se.clear();
+               se.insert(s[i]);
+
+           }
+            
+            else
+            {
+                se.insert(s[i]);
+            }
         }
-         
-        pos[s[i] - 'a'] = i + 1;
-    }
-    return res;
+        
+        se.clear();
+        //second from right
+        for(int i=n-1;i>=0;i--)
+        {
+           if(se.count(s[i]))
+           {
+               cnt_r++;
+               se.clear();
+               se.insert(s[i]);
+
+           }
+            
+            else
+            {
+                se.insert(s[i]);
+            }
+        }
+        
+        return min(cnt_l,cnt_r);
     }
 };
