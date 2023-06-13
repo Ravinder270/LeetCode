@@ -4,30 +4,42 @@ using namespace std;
 
 // } Driver Code Ends
 class Solution
-{
-	void solve(vector<int> adj[],vector<int>&s,unordered_map<int,bool>&vist,int node){
-        vist[node]=true;
-        for(auto nbr:adj[node]){
-            if(!vist[nbr]){
-                solve(adj,s,vist,nbr);
-            }
-        }
-        s.push_back(node);
-    }
-	public:
+{public:
 	//Function to return list containing vertices in Topological order. 
-	vector<int> topoSort(int V, vector<int> adj[]) 
+	void dfs(int node,stack<int>&st,vector<int>adj[],int vis[])
 	{
-	    // code here
-	    vector<int>ans;
-	    unordered_map<int,bool>vist;
-	    for(int i=0;i<V;i++){
-	        if(!vist[i]){
-	            solve(adj,ans,vist,i);
+	    vis[node]=1;
+	    
+	    for(auto it:adj[node])
+	    {
+	        if(!vis[it])
+	        {
+	            dfs(it,st,adj,vis);
 	        }
 	    }
-	    reverse(ans.begin(),ans.end());
-	    return ans;
+	    st.push(node);
+	}
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    stack<int>st;
+	    int vis[V]={0};
+	    for(int i=0;i<V;i++)
+	    {
+	        if(!vis[i])
+	        {
+	            dfs(i,st,adj,vis);
+	        }
+	    }
+	    
+	   vector<int>ans;
+	   while(!st.empty())
+	   {
+	       int x=st.top();
+	       ans.push_back(x);
+	       st.pop();
+	   }
+	   return ans;
+	    
 	}
 };
 
